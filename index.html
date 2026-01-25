@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Haripur University GPA/CGPA Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #1a3a6c;
+            --secondary: #d4af37;
+            --accent: #e63946;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #28a745;
+            --warning: #ffc107;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --border-radius: 10px;
+        }
+
+             body {
+            background: linear-gradient(rgba(26, 58, 108, 0.85), rgba(44, 82, 130, 0.9)), 
+                        url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80') no-repeat center center;
+            background-size: cover;
+            background-attachment: fixed;
+            color: var(--dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 800px;
+            overflow: hidden;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+
+        .university-logo {
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            font-size: 2.5rem;
+            color: var(--secondary);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .mode-selection {
+            display: flex;
+            gap: 20px;
+            padding: 30px;
+            justify-content: center;
+        }
+
+        .mode-card {
+            background: var(--light);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            text-align: center;
+            width: 45%;
+            min-width: 280px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .mode-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            border-color: var(--secondary);
+        }
+
+        .mode-card i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .mode-card h2 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .mode-card p {
+            color: var(--gray);
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            background: #0d2a4d;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+        }
+
+        .btn-secondary:hover {
+            background: #b08d26;
+        }
+
+        .content-section {
+            padding: 30px;
+            display: none;
+        }
+
+        .section-title {
+            color: var(--primary);
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-gray);
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        select, input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        select:focus, input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .subject-container {
+            background: var(--light);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .subject-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .subject-title {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .result-container {
+            background: var(--success);
+            color: white;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .result-value {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 15px 0;
+        }
+
+        .result-text {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .reset-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+        }
+
+        .reset-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 25px 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        .info-box h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .info-box ul {
+            padding-left: 20px;
+        }
+
+        .info-box li {
+            margin-bottom: 8px;
+        }
+
+        .grade-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            box-shadow: var(--shadow);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .grade-table th {
+            background: var(--primary);
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .grade-table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .grade-table tr:nth-child(even) {
+            background: var(--light-gray);
+        }
+
+        .grade-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .required {
+            color: var(--accent);
+        }
+
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+        }
+
+        .footer-contact {
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 20px;
+            cursor: pointer;
+            width: fit-content;
+        }
+
+        @media (max-width: 768px) {
+            .mode-selection {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .mode-card {
+                width: 100%;
+                max-width: 400px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 20px 15px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .university-logo {
+                position: static;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="university-logo">
+                <i class="fas fa-university"></i>
+            </div>
+            <h1>🎓Haripur University GPA/CGPA Calculator</h1>
+            <p class="subtitle">Note: This GPA/CGPA Calculator follows the official grading system of <span style="color: #e1bf00; font-weight: bold;">The University of Haripur</span>. Only for Haripur University students.</p>
+
+        </header>
+        
+        <div class="mode-selection">
+            <div class="mode-card" id="gpaCard">
+                <i class="fas fa-calculator"></i>
+                <h2>Calculate GPA</h2>
+                <p>Calculate your Grade Point Average for a single semester. Enter subjects, credit hours, and marks to get your semester GPA.</p>
+                <button class="btn" onclick="showGPAForm()">Calculate GPA</button>
+            </div>
+            
+            <div class="mode-card" id="cgpaCard">
+                <i class="fas fa-chart-line"></i>
+                <h2>Calculate CGPA</h2>
+                <p>Calculate your Cumulative Grade Point Average across multiple semesters. Enter GPA and credit hours for each semester.</p>
+                <button class="btn btn-secondary" onclick="showCGPAForm()">Calculate CGPA</button>
+            </div>
+        </div>
+        
+        <!-- GPA Calculation Section -->
+        <div class="content-section" id="gpaSection">
+            <div class="back-btn" onclick="goToMainMenu()">
+                <i class="fas fa-arrow-left"></i> Back to Main Menu
+            </div>
+            
+            <h2 class="section-title">Semester GPA Calculation</h2>
+            
+            <div class="info-box">
+                <h3>How to calculate your GPA</h3>
+                <ul>
+                    <li>Enter all subjects you're taking this semester</li>
+                    <li>Provide the credit hours for each subject</li>
+                    <li>Enter the marks obtained for each subject</li>
+                    <li>Your GPA will be calculated automatically</li>
+                    <li><strong>Note:</strong> Minimum passing GPA is 2.00</li>
+                </ul>
+            </div>
+            
+            <div class="form-group">
+                <label for="subjectCount">Number of Subjects:</label>
+                <select id="subjectCount">
+                    <option value="" disabled selected>Select number of subjects</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select>
+            </div>
+            
+            <button class="btn" id="proceedBtn" onclick="showSubjectDetails()">Proceed to Enter Subjects</button>
+            
+            <div id="subjectDetails"></div>
+            <div id="marksSection"></div>
+            
+            <div class="result-container" id="gpaResult">
+                <h3>Your Semester GPA</h3>
+                <div class="result-value" id="gpaValue">0.00</div>
+                <p class="result-text" id="gpaText">Your calculated GPA will appear here</p>
+                <button class="btn reset-btn" onclick="resetGPAForm()">Calculate Again</button>
+            </div>
+        </div>
+        
+        <!-- CGPA Calculation Section -->
+        <div class="content-section" id="cgpaSection">
+            <div class="back-btn" onclick="goToMainMenu()">
+                <i class="fas fa-arrow-left"></i> Back to Main Menu
+            </div>
+            
+            <h2 class="section-title">Cumulative CGPA Calculation</h2>
+            
+            <div class="info-box">
+                <h3>How to calculate your CGPA</h3>
+                <ul>
+                    <li>Enter the number of semesters you want to include</li>
+                    <li>For each semester, provide the GPA and total credit hours</li>
+                    <li>Your CGPA will be calculated automatically</li>
+                    <li><strong>Note:</strong> Minimum CGPA for degree completion is <span class="required">2.00</span></li>
+                </ul>
+            </div>
+            
+            <div class="form-group">
+                <label for="semesterCount">Number of Semesters:</label>
+                <select id="semesterCount">
+                    <option value="" disabled selected>Select number of semesters</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                </select>
+            </div>
+            
+            <button class="btn btn-secondary" id="cgpaProceedBtn" onclick="showSemesterDetails()">Proceed to Enter Semesters</button>
+            
+            <div id="semesterDetails"></div>
+            
+            <div class="result-container" id="cgpaResult">
+                <h3>Your Cumulative CGPA</h3>
+                <div class="result-value" id="cgpaValue">0.00</div>
+                <p class="result-text" id="cgpaText">Your calculated CGPA will appear here</p>
+                <button class="btn reset-btn" onclick="resetCGPAForm()">Calculate Again</button>
+            </div>
+        </div>
+        
+        <!-- Grading System Information -->
+        <div class="content-section" id="gradingInfo">
+            <h2 class="section-title">University of Haripur Grading System</h2>
+            
+            <div class="info-box">
+                <h3>Official Grading System (Effective 2023)</h3>
+                <p>This table shows the conversion of marks to grade points according to the University of Haripur regulations.</p>
+            </div>
+            
+            <table class="grade-table">
+                <thead>
+                    <tr>
+                        <th>Percentage</th>
+                        <th>Letter Grade</th>
+                        <th>Grade Point</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>85% and above</td>
+                        <td>A</td>
+                        <td>4.00</td>
+                    </tr>
+                    <tr>
+                        <td>80% - 84%</td>
+                        <td>A-</td>
+                        <td>3.50 - 3.99</td>
+                    </tr>
+                    <tr>
+                        <td>75% - 79%</td>
+                        <td>B+</td>
+                        <td>3.00 - 3.49</td>
+                    </tr>
+                    <tr>
+                        <td>70% - 74%</td>
+                        <td>B</td>
+                        <td>2.50 - 2.99</td>
+                    </tr>
+                    <tr>
+                        <td>65% - 69%</td>
+                        <td>B-</td>
+                        <td>2.00 - 2.49</td>
+                    </tr>
+                    <tr>
+                        <td>60% - 64%</td>
+                        <td>C+</td>
+                        <td>1.50 - 1.99</td>
+                    </tr>
+                    <tr>
+                        <td>55% - 59%</td>
+                        <td>C</td>
+                        <td>1.00 - 1.49</td>
+                    </tr>
+                    <tr>
+                        <td>50% - 54%</td>
+                        <td>D</td>
+                        <td>0.50 - 0.99</td>
+                    </tr>
+                    <tr>
+                        <td>Below 50%</td>
+                        <td>F</td>
+                        <td>0.00</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="info-box">
+                <h3>Important Notes</h3>
+                <ul>
+                    <li>CGPA is calculated as the weighted average of GPA of all semesters</li>
+                    <li>Each semester's GPA is weighted by its total credit hours</li>
+                    <li>Minimum CGPA for degree completion: <span class="required">2.00</span></li>
+                    <li>This calculator follows the official University of Haripur grading policy</li>
+                </ul>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn" onclick="goToMainMenu()">Back to Calculator</button>
+            </div>
+        </div>
+        
+        <footer>
+            <p> GPA/CGPA Calculator for University of Haripur</p>
+            <p class="footer-contact">Need a website? Contact: <strong>imawaisabid@gmail.com</strong></p>
+            <p>© 2025 Haripur University. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Show/hide sections
+        function showGPAForm() {
+            document.querySelector('.mode-selection').style.display = 'none';
+            document.getElementById('gpaSection').style.display = 'block';
+        }
+        
+        function showCGPAForm() {
+            document.querySelector('.mode-selection').style.display = 'none';
+            document.getElementById('cgpaSection').style.display = 'block';
+        }
+        
+        function goToMainMenu() {
+            document.querySelector('.mode-selection').style.display = 'flex';
+            document.getElementById('gpaSection').style.display = 'none';
+            document.getElementById('cgpaSection').style.display = 'none';
+            document.getElementById('gradingInfo').style.display = 'none';
+            resetGPAForm();
+            resetCGPAForm();
+        }
+        
+        function showGradingInfo() {
+            document.querySelector('.mode-selection').style.display = 'none';
+            document.getElementById('gradingInfo').style.display = 'block';
+        }
+        
+        // GPA Calculation Functions
+        let subjects = [];
+        
+        function showSubjectDetails() {
+            const count = parseInt(document.getElementById('subjectCount').value);
+            if (isNaN(count)) {
+                alert("Please select the number of subjects.");
+                return;
+            }
+            
+            subjects = [];
+            const detailsDiv = document.getElementById('subjectDetails');
+            detailsDiv.innerHTML = '<h3 class="section-title">Enter Subject Details</h3>';
+            
+            for (let i = 0; i < count; i++) {
+                detailsDiv.innerHTML += `
+                    <div class="subject-container">
+                        <div class="subject-header">
+                            <div class="subject-title">Subject ${i + 1}</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="subjectName${i}">Subject Name:</label>
+                            <input type="text" id="subjectName${i}" placeholder="Enter subject name">
+                        </div>
+                        <div class="form-group">
+                            <label for="creditHours${i}">Credit Hours:</label>
+                            <input type="number" id="creditHours${i}" min="1" max="10" placeholder="Enter credit hours">
+                        </div>
+                    </div>
+                `;
+            }
+            
+            detailsDiv.innerHTML += `
+                <div class="action-buttons">
+                    <button class="btn" onclick="showMarksSection()">Next: Enter Marks</button>
+                </div>
+            `;
+        }
+        
+        function showMarksSection() {
+            const count = parseInt(document.getElementById('subjectCount').value);
+            let allFilled = true;
+            
+            // Collect subject names and credit hours
+            for (let i = 0; i < count; i++) {
+                const name = document.getElementById(`subjectName${i}`).value.trim();
+                const credits = document.getElementById(`creditHours${i}`).value;
+                
+                if (!name || !credits) {
+                    allFilled = false;
+                    break;
+                }
+                
+                subjects[i] = {
+                    name: name,
+                    credits: parseInt(credits),
+                    marks: 0
+                };
+            }
+            
+            if (!allFilled) {
+                alert("Please fill all subject names and credit hours.");
+                return;
+            }
+            
+            const marksDiv = document.getElementById('marksSection');
+            marksDiv.innerHTML = '<h3 class="section-title">Enter Marks Obtained</h3>';
+            
+            for (let i = 0; i < count; i++) {
+                marksDiv.innerHTML += `
+                    <div class="subject-container">
+                        <div class="subject-header">
+                            <div class="subject-title">${subjects[i].name} (${subjects[i].credits} Credit Hours)</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="marks${i}">Marks Obtained (0-100):</label>
+                            <input type="number" id="marks${i}" min="0" max="100" placeholder="Enter marks obtained">
+                        </div>
+                    </div>
+                `;
+            }
+            
+            marksDiv.innerHTML += `
+                <div class="action-buttons">
+                    <button class="btn" onclick="calculateGPA()">Calculate GPA</button>
+                </div>
+            `;
+        }
+        
+        function getGradePoint(marks) {
+            if (marks < 50) return 0.00;
+            if (marks === 50) return 1.00;
+            if (marks === 51) return 1.08;
+            if (marks === 52) return 1.17;
+            if (marks === 53) return 1.25;
+            if (marks === 54) return 1.33;
+            if (marks === 55) return 1.42;
+            if (marks === 56) return 1.50;
+            if (marks === 57) return 1.58;
+            if (marks === 58) return 1.67;
+            if (marks === 59) return 1.75;
+            if (marks === 60) return 1.83;
+            if (marks === 61) return 1.92;
+            if (marks === 62) return 2.00;
+            if (marks === 63) return 2.08;
+            if (marks === 64) return 2.17;
+            if (marks === 65) return 2.25;
+            if (marks === 66) return 2.33;
+            if (marks === 67) return 2.42;
+            if (marks === 68) return 2.50;
+            if (marks === 69) return 2.58;
+            if (marks === 70) return 2.67;
+            if (marks === 71) return 2.75;
+            if (marks === 72) return 2.83;
+            if (marks === 73) return 2.92;
+            if (marks === 74) return 3.00;
+            if (marks === 75) return 3.08;
+            if (marks === 76) return 3.17;
+            if (marks === 77) return 3.25;
+            if (marks === 78) return 3.33;
+            if (marks === 79) return 3.42;
+            if (marks === 80) return 3.50;
+            if (marks === 81) return 3.60;
+            if (marks === 82) return 3.70;
+            if (marks === 83) return 3.80;
+            if (marks === 84) return 3.90;
+            if (marks >= 85) return 4.00;
+            return 0.00;
+        }
+        
+        function calculateGPA() {
+            const count = parseInt(document.getElementById('subjectCount').value);
+            let totalPoints = 0;
+            let totalCredits = 0;
+            let allMarksValid = true;
+            
+            for (let i = 0; i < count; i++) {
+                const marksInput = document.getElementById(`marks${i}`);
+                const marks = parseFloat(marksInput.value);
+                
+                if (isNaN(marks) || marks < 0 || marks > 100) {
+                    marksInput.style.borderColor = 'red';
+                    allMarksValid = false;
+                } else {
+                    marksInput.style.borderColor = '';
+                    const gradePoint = getGradePoint(marks);
+                    totalPoints += gradePoint * subjects[i].credits;
+                    totalCredits += subjects[i].credits;
+                }
+            }
+            
+            if (!allMarksValid) {
+                alert("Please enter valid marks between 0 and 100 for all subjects.");
+                return;
+            }
+            
+            const gpa = (totalPoints / totalCredits).toFixed(2);
+            const gpaValue = document.getElementById('gpaValue');
+            const gpaText = document.getElementById('gpaText');
+            
+            gpaValue.textContent = gpa;
+            gpaText.textContent = getGPAComment(gpa);
+            
+            document.getElementById('gpaResult').style.display = 'block';
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+        
+        function getGPAComment(gpa) {
+            gpa = parseFloat(gpa);
+            if (gpa >= 3.5) return "Excellent! Keep up the great work!";
+            if (gpa >= 3.0) return "Very good performance!";
+            if (gpa >= 2.5) return "Good job! You're doing well.";
+            if (gpa >= 2.0) return "Satisfactory performance. Keep improving!";
+            return "You need to improve. Minimum required GPA is 2.00.";
+        }
+        
+        function resetGPAForm() {
+            document.getElementById('subjectDetails').innerHTML = '';
+            document.getElementById('marksSection').innerHTML = '';
+            document.getElementById('gpaResult').style.display = 'none';
+            document.getElementById('subjectCount').value = '';
+        }
+        
+        // CGPA Calculation Functions
+        let semesters = [];
+        
+        function showSemesterDetails() {
+            const count = parseInt(document.getElementById('semesterCount').value);
+            if (isNaN(count)) {
+                alert("Please select the number of semesters.");
+                return;
+            }
+            
+            semesters = [];
+            const detailsDiv = document.getElementById('semesterDetails');
+            detailsDiv.innerHTML = '<h3 class="section-title">Enter Semester Details</h3>';
+            
+            for (let i = 0; i < count; i++) {
+                detailsDiv.innerHTML += `
+                    <div class="subject-container">
+                        <div class="subject-header">
+                            <div class="subject-title">Semester ${i + 1}</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="semesterGPA${i}">GPA (0.00 - 4.00):</label>
+                            <input type="number" id="semesterGPA${i}" min="0" max="4" step="0.01" placeholder="Enter GPA">
+                        </div>
+                        <div class="form-group">
+                            <label for="semesterCredits${i}">Total Credit Hours:</label>
+                            <input type="number" id="semesterCredits${i}" min="1" max="50" placeholder="Enter credit hours">
+                        </div>
+                    </div>
+                `;
+            }
+            
+            detailsDiv.innerHTML += `
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" onclick="calculateCGPA()">Calculate CGPA</button>
+                </div>
+            `;
+        }
+        
+        function calculateCGPA() {
+            const count = parseInt(document.getElementById('semesterCount').value);
+            let totalPoints = 0;
+            let totalCredits = 0;
+            let allValid = true;
+            
+            for (let i = 0; i < count; i++) {
+                const gpaInput = document.getElementById(`semesterGPA${i}`);
+                const creditsInput = document.getElementById(`semesterCredits${i}`);
+                const gpa = parseFloat(gpaInput.value);
+                const credits = parseFloat(creditsInput.value);
+                
+                if (isNaN(gpa) || gpa < 0 || gpa > 4 || isNaN(credits) || credits <= 0) {
+                    if (isNaN(gpa) || gpa < 0 || gpa > 4) gpaInput.style.borderColor = 'red';
+                    if (isNaN(credits) || credits <= 0) creditsInput.style.borderColor = 'red';
+                    allValid = false;
+                } else {
+                    gpaInput.style.borderColor = '';
+                    creditsInput.style.borderColor = '';
+                    totalPoints += gpa * credits;
+                    totalCredits += credits;
+                }
+            }
+            
+            if (!allValid) {
+                alert("Please enter valid GPA (0.00-4.00) and credit hours (greater than 0) for all semesters.");
+                return;
+            }
+            
+            const cgpa = (totalPoints / totalCredits).toFixed(2);
+            const cgpaValue = document.getElementById('cgpaValue');
+            const cgpaText = document.getElementById('cgpaText');
+            
+            cgpaValue.textContent = cgpa;
+            cgpaText.textContent = getCGPAComment(cgpa);
+            
+            document.getElementById('cgpaResult').style.display = 'block';
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+        
+        function getCGPAComment(cgpa) {
+            cgpa = parseFloat(cgpa);
+            if (cgpa >= 3.5) return "Outstanding cumulative performance!";
+            if (cgpa >= 3.0) return "Excellent work! Maintain your performance.";
+            if (cgpa >= 2.5) return "Good cumulative results. Keep it up!";
+            if (cgpa >= 2.0) return "Satisfactory. You meet the minimum requirement.";
+            return "Warning: You need to improve. Minimum required CGPA is 2.00.";
+        }
+        
+        function resetCGPAForm() {
+            document.getElementById('semesterDetails').innerHTML = '';
+            document.getElementById('cgpaResult').style.display = 'none';
+            document.getElementById('semesterCount').value = '';
+        }
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('.mode-selection').style.display = 'flex';
+        });
+    </script>
+</body>
+</html>
