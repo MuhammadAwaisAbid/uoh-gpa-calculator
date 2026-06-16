@@ -9,7 +9,7 @@ This web-based GPA and CGPA calculator is designed specifically for students of 
 - Simple and responsive UI
 
 ## Live Demo
-https://ashmaa1111.github.io/uoh-gpa-calculator/
+https://muhammadawaisabid.github.io/uoh-gpa-calculator/
 
 ## Disclaimer
 This calculator is for academic assistance only. Please verify results with official university records.
